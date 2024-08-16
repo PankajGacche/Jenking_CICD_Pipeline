@@ -9,7 +9,7 @@ pipeline{
     stage('Build'){
       steps{
         git branch: 'main', url: 'https://github.com/PankajGacche/Jenking_CICD_Pipeline.git'
-        bat 'python3 simple_app.py'
+        bat 'python simple_app.py'
       }
     }
       stage('Test'){
