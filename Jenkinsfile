@@ -7,17 +7,24 @@ pipeline {
                 // Checkout source code
                 checkout scm
 
-                // Install dependencies using pip
+                // Set up and activate virtual environment
                 script {
-                    sh 'pip3 install -r requirements.txt'
+                    sh '''
+                        python3 -m venv venv
+                        source venv/bin/activate
+                        pip install -r requirements.txt
+                    '''
                 }
             }
         }
         stage('Test') {
             steps {
-                // Run unit tests using pytest
+                // Activate virtual environment and run tests
                 script {
-                    sh 'pytest'
+                    sh '''
+                        source venv/bin/activate
+                        pytest
+                    '''
                 }
             }
         }
@@ -31,7 +38,6 @@ pipeline {
             steps {
                 // Deploy application to staging environment
                 script {
-                    // Replace with your deployment script or commands
                     sh 'deploy-to-staging.sh'
                 }
             }
