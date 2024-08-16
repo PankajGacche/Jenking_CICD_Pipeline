@@ -4,7 +4,7 @@ from flask import Flask
 app = Flask(__name__)
 
 @app.route('/')
-def index():
+def home():
     return "Hello Pankaj!!!"
 
 # Run the server
