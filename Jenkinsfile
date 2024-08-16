@@ -17,7 +17,7 @@ pipeline{
           echo "Flask application is running."
         }
       }
-        stage('Test'){
+        stage('Deploy'){
         steps{
           echo "Flask application deplyed successfully."
       }  
