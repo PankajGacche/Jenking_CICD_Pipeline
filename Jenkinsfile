@@ -1,27 +1,51 @@
-pipeline{
-  agent any
-  stages{
-    stage('Checkout'){
-      steps{
-        checkout scmGit(branches: [[name: '/*main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/PankajGacche/Jenking_CICD_Pipeline.git']])
-      }
-    }
-    stage('Build'){
-      steps{
-        git branch: 'main', url: 'https://github.com/PankajGacche/Jenking_CICD_Pipeline.git'
-        bat 'python simple_app.py'
-      }
-    }
-      stage('Test'){
-        steps{
-          echo "Flask application is running."
-        }
-      }
-        stage('Deploy'){
-        steps{
-          echo "Flask application deplyed successfully."
-      }  
-    }
-  }
-}
+pipeline {
+    agent any
 
+    stages {
+        stage('Build') {
+            steps {
+                // Checkout source code
+                checkout scm
+
+                // Install dependencies using pip
+                script {
+                    sh 'pip3 install -r requirements.txt'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                // Run unit tests using pytest
+                script {
+                    sh 'pytest'
+                }
+            }
+        }
+        stage('Deploy') {
+            when {
+                // Only deploy if the tests pass
+                expression {
+                    return currentBuild.result == 'SUCCESS'
+                }
+            }
+            steps {
+                // Deploy application to staging environment
+                script {
+                    // Replace with your deployment script or commands
+                    sh 'deploy-to-staging.sh'
+                }
+            }
+        }
+    }
+    post {
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+        always {
+            echo 'Pipeline finished.'
+        }
+    }
+}
