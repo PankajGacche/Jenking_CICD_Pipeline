@@ -10,9 +10,8 @@ pipeline {
                 // Set up and activate virtual environment
                 script {
                     sh '''
-                        #!/bin/bash
                         python3 -m venv venv
-                        source venv/bin/activate
+                        . venv/bin/activate
                         pip install -r requirements.txt
                     '''
                 }
@@ -23,8 +22,7 @@ pipeline {
                 // Activate virtual environment and run tests
                 script {
                     sh '''
-                        #!/bin/bash
-                        source venv/bin/activate
+                        . venv/bin/activate
                         pytest
                     '''
                 }
