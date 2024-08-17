@@ -39,8 +39,9 @@ pipeline {
             steps {
                 // Deploy application to staging environment
                 script {
-                    sh 'deploy-to-staging.sh'
-                }
+                    withCredentials([sshUserPrivateKey(credentialsId: SSH_KEY_ID, keyFileVariable: 'SSH_KEY')]) {
+                        sh './deploy-to-staging.sh'
+                    }
             }
         }
     }
