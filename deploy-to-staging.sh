@@ -10,7 +10,7 @@ REPO_URL="https://github.com/PankajGacche/Jenking_CICD_Pipeline.git"
 DEPLOY_PATH="/home/ubuntu/flask_app"
 VENV_PATH="/home/ubuntu/flask_app/venv"
 SERVICE_NAME="flask_app.service"
-SSH_KEY="/home/pankajgacche/My_Key_Pair.pem"
+SSH_KEY="/home/pankajgacche/mern_pankaj.pem"
 
 # Optional: Print start of deployment
 echo "Starting deployment to staging environment..."
