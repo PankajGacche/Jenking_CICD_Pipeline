@@ -32,10 +32,10 @@ pipeline {
         }
         stage('Deploy') {
             when {
-                // Only deploy if the tests pass
-                expression {
-                    return currentBuild.result == 'SUCCESS'
-                }
+            expression {
+            echo "Build result: ${currentBuild.result}"
+            return currentBuild.result == 'SUCCESS'
+            }
             }
             steps {
                 // Deploy application to staging environment
