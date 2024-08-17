@@ -42,6 +42,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: SSH_KEY_ID, keyFileVariable: 'SSH_KEY')]) {
                         sh './deploy-to-staging.sh'
                     }
+                }
             }
         }
     }
