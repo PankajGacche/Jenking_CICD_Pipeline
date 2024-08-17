@@ -5,7 +5,7 @@ set -e
 
 # Define variables
 APP_NAME="flask_app"
-STAGING_SERVER="ec2-13-60-241-235.eu-north-1.compute.amazonaws.com"
+STAGING_SERVER="ec2-13-60-168-37.eu-north-1.compute.amazonaws.com"
 REPO_URL="https://github.com/PankajGacche/Jenking_CICD_Pipeline.git"
 DEPLOY_PATH="/home/ubuntu/flask_app"
 VENV_PATH="/home/ubuntu/flask_app/venv"
