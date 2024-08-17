@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    environment {
+        SSH_KEY_ID = 'ec2-ssh-key' // Replace with the ID of your SSH key credential
+    }
     stages {
         stage('Build') {
             steps {
