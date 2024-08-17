@@ -1,7 +1,7 @@
 pipeline {
     agent any
    environment {
-    SSH_KEY_PATH = '/var/lib/jenkins/My_Key_Pair.pem'
+    SSH_KEY_ID = 'ec2-ssh-key'
 }
 
     stages {
