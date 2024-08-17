@@ -30,6 +30,12 @@ pipeline {
                 }
             }
         }
+        stage('Set Permissions') {
+            steps {
+                // Ensure the script has execute permissions
+                sh 'chmod +x deploy-to-staging.sh'
+            }
+        }
         stage('Deploy') {
             when {
             expression {
