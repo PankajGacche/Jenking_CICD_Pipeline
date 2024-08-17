@@ -17,7 +17,6 @@ pipeline {
                         pip install -r requirements.txt
                     '''
                 }
-                sh './build.sh'
             }
         }
         stage('Test') {
@@ -29,14 +28,12 @@ pipeline {
                         pytest
                     '''
                 }
-                sh './run-tests.sh'
             }
         }
         stage('Deploy') {
             when {
             expression {
-            echo "Build result: ${currentBuild.result}"
-            return currentBuild.result == 'SUCCESS'
+               return currentBuild.result == null || currentBuild.result == 'SUCCESS'
             }
             }
             steps {
