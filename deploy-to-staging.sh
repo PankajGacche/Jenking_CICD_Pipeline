@@ -5,12 +5,12 @@ set -e
 
 # Define variables
 APP_NAME="flask_app"
-STAGING_SERVER="ec2-13-60-168-37.eu-north-1.compute.amazonaws.com"
+STAGING_SERVER="ec2-16-171-253-111.eu-north-1.compute.amazonaws.com"
 REPO_URL="https://github.com/PankajGacche/Jenking_CICD_Pipeline.git"
 DEPLOY_PATH="/home/ubuntu/flask_app"
 VENV_PATH="/home/ubuntu/flask_app/venv"
 SERVICE_NAME="flask_app.service"
-SSH_KEY="/home/pankajgacche/mern_pankaj.pem"
+SSH_KEY="/home/cicd.pem"
 
 # Optional: Print start of deployment
 echo "Starting deployment to staging environment..."
