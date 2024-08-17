@@ -17,6 +17,7 @@ pipeline {
                         pip install -r requirements.txt
                     '''
                 }
+                sh './build.sh'
             }
         }
         stage('Test') {
@@ -28,6 +29,7 @@ pipeline {
                         pytest
                     '''
                 }
+                sh './run-tests.sh'
             }
         }
         stage('Deploy') {
