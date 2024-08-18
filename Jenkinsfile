@@ -14,7 +14,6 @@ pipeline {
                 // Set up and activate virtual environment
                 script {
                     sh '''
-                       sudo apt update && sudo apt install -y python3-pip'
                         python3 -m venv venv
                         . venv/bin/activate
                         pip install -r requirements.txt
@@ -44,6 +43,7 @@ pipeline {
                 script {
                     sh '''
                         sudo chmod 400 $SSH_KEY
+                        sudo apt update && sudo apt install -y python3-pip
                         ssh -i $SSH_KEY ubuntu@$ec2Host "bash -s" < deploy-to-staging.sh
                         '''
                 }
