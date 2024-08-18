@@ -12,9 +12,6 @@ VENV_PATH="/home/ubuntu/flask_app/venv"
 SERVICE_NAME="flask_app.service"
 SSH_KEY="/home/pankajgacche/cicd.pem"
 
-# Ensure the SSH key has the correct permissions
-sudo chmod 600 $SSH_KEY
-
 # Optional: Print start of deployment
 echo "Starting deployment to staging environment..."
 
