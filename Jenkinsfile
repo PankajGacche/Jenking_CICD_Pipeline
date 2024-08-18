@@ -14,6 +14,7 @@ pipeline {
                 // Set up and activate virtual environment
                 script {
                     sh '''
+                    sh 'sudo apt update && sudo apt install -y python3-pip'
                         python3 -m venv venv
                         . venv/bin/activate
                         pip install -r requirements.txt
