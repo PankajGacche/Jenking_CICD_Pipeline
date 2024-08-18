@@ -36,7 +36,6 @@ pipeline {
             steps {
                 // Ensure the script has execute permissions
                 sh 'chmod +x deploy-to-staging.sh'
-                sh 'sudo ./deploy-to-staging.sh'
             }
         }
         stage('Deploy to EC2') {
