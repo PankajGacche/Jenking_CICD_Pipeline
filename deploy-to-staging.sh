@@ -14,12 +14,12 @@ log() {
 }
 
 # Check for necessary commands
-for cmd in git python3 systemctl pip; do
-    if ! command -v $cmd &> /dev/null; then
-        log "$cmd command not found. Please install it."
-        exit 1
-    fi
-done
+# for cmd in git python3 systemctl pip; do
+#     if ! command -v $cmd &> /dev/null; then
+#         log "$cmd command not found. Please install it."
+#         exit 1
+#     fi
+# done
 
 # Ensure the application directory exists
 if [ ! -d "$APP_DIR" ]; then
