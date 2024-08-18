@@ -12,13 +12,6 @@ GUNICORN_SERVICE_NAME="gunicorn_staging"  # Name of the Gunicorn service (adjust
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
 }
-
-# Ensure the script is run as root
-if [ "$(id -u)" -ne "0" ]; then
-    log "This script must be run as root" >&2
-    exit 1
-fi
-
 # Navigate to the application directory
 log "Navigating to the application directory..."
 if ! cd "$APP_DIR"; then
