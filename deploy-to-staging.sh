@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define variables
-APP_DIR="/home/ubuntu"  # Path to your application on the EC2 instance
+APP_DIR="/var/lib/jenkins/workspace/Python_Flask_Pipeline"  # Path to your application on the EC2 instance
 REPO_URL="https://github.com/PankajGacche/Jenking_CICD_Pipeline.git"  # Your Git repository URL
 BRANCH="main"  # Git branch to deploy
 VENV_DIR="$APP_DIR/venv"  # Path to the virtual environment
