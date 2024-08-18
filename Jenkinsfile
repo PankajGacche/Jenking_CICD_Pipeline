@@ -43,9 +43,8 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        chmod 400 $SSH_KEY
+                        sudo chmod 400 $SSH_KEY
                         ssh -i $SSH_KEY ubuntu@$ec2Host "bash -s" < deploy-to-staging.sh
-                        
                         '''
                 }
             }
