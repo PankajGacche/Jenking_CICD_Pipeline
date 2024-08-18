@@ -42,7 +42,7 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                 script {
-                    withCredentials([file(credentialsId: $sshKey, variable: 'SSH_KEY')]) {
+                    withCredentials([file(credentialsId: my-ec2-key, variable: 'SSH_KEY')]) {
                         sh '''
                         chmod 400 $SSH_KEY
                         ssh -i $SSH_KEY ubuntu@ec2Host "bash -s" < deploy-to-staging.sh
