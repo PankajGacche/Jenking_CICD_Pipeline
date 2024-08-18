@@ -45,7 +45,32 @@ else
     # Apply stashed changes if needed
     git stash pop || true
 fi
+ Paths
+SERVICE_FILE=/etc/systemd/system/my-flask-app.service
+PROJECT_DIR=/home/ubuntu/myproject
 
+# Create or update the Gunicorn service file
+if [ ! -f "$SERVICE_FILE" ]; then
+    echo "Gunicorn service file not found. Creating..."
+    sudo bash -c 'cat > /etc/systemd/system/my-flask-app.service <<EOF
+    [Unit]
+    Description=Gunicorn instance to serve my-flask-app
+    After=network.target
+
+    [Service]
+    User=ubuntu
+    Group=ubuntu
+    WorkingDirectory=/home/ubuntu/myproject
+    ExecStart=/home/ubuntu/myproject/venv/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/myproject/my-flask-app.sock app:app
+
+    [Install]
+    WantedBy=multi-user.target
+    EOF'
+fi
+
+# Reload systemd and restart the service
+sudo systemctl daemon-reload
+sudo systemctl restart my-flask-app
 # Activate the virtual environment
 log "Activating virtual environment..."
 if [ -f "$VENV_DIR/bin/activate" ]; then
