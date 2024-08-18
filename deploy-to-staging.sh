@@ -81,6 +81,24 @@ else
     source "$VENV_DIR/bin/activate"
 fi
 
+echo "Navigating to the application directory..."
+cd /home/ubuntu/myproject || { echo "Directory not found"; exit 1; }
+
+echo "Activating virtual environment..."
+source venv/bin/activate
+
+echo "Installing dependencies..."
+if [ -f requirements.txt ]; then
+    pip install -r requirements.txt
+else
+    echo "requirements.txt file not found"
+    exit 1
+fi
+
+echo "Restarting Gunicorn service..."
+sudo systemctl restart my-flask-app || { echo "Failed to restart Gunicorn"; exit 1; }
+
+
 # Install Python dependencies
 log "Installing dependencies..."
 pip install --upgrade pip
