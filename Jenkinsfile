@@ -44,7 +44,7 @@ pipeline {
                 script {
                     sh '''
                         chmod 400 $SSH_KEY
-                        ssh -i $SSH_KEY ubuntu@ec2Host "bash -s" < deploy-to-staging.sh
+                        ssh -i $SSH_KEY ubuntu@$ec2Host "bash -s" < deploy-to-staging.sh
                         '''
                 }
             }
