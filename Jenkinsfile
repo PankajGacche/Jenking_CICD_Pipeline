@@ -44,7 +44,6 @@ pipeline {
                 script {
                     sh '''
                         chmod 400 $SSH_KEY
-                        cd /var/lib/jenkins/workspace/Python_Flask_Pipeline
                         ssh -i $SSH_KEY ubuntu@$ec2Host "bash -s" < deploy-to-staging.sh
                         
                         '''
