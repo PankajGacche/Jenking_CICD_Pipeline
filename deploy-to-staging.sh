@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Define variables
-APP_DIR="/home/ubuntu/myproject"  # Path to your application on the EC2 instance
-REPO_URL="https://github.com/PankajGacche/Jenking_CICD_Pipeline.git"  # Your Git repository URL
-BRANCH="main"  # Git branch to deploy
-VENV_DIR="$APP_DIR/venv"  # Path to the virtual environment
-APP_NAME="app"  # Name of your Flask application (adjust as needed)
-GUNICORN_SERVICE_NAME="gunicorn_staging"  # Name of the Gunicorn service (adjust as needed)
+APP_DIR="/home/ubuntu/myproject"
+REPO_URL="https://github.com/PankajGacche/Jenking_CICD_Pipeline.git"
+BRANCH="main"
+VENV_DIR="$APP_DIR/venv"
+APP_NAME="app"
+GUNICORN_SERVICE_NAME="gunicorn_staging"
 
 # Functions
 log() {
@@ -21,12 +21,15 @@ for cmd in git python3 systemctl pip; do
     fi
 done
 
+# Ensure the application directory exists
+if [ ! -d "$APP_DIR" ]; then
+    log "Application directory not found, creating..."
+    mkdir -p "$APP_DIR"
+fi
+
 # Navigate to the application directory
 log "Navigating to the application directory..."
-if ! cd "$APP_DIR"; then
-    log "Application directory not found!"
-    exit 1
-fi
+cd "$APP_DIR" || { log "Application directory not found!"; exit 1; }
 
 # Ensure the repository is cloned and update
 if [ ! -d ".git" ]; then
@@ -35,14 +38,9 @@ if [ ! -d ".git" ]; then
 else
     log "Repository found, fetching and updating..."
     git fetch --all
-
-    # Handle uncommitted local changes by stashing them
     git stash push -m "Jenkins auto-stash before pull"
-
     git checkout "$BRANCH"
     git pull origin "$BRANCH"
-
-    # Apply stashed changes if needed
     git stash pop || true
 fi
 
