@@ -5,7 +5,7 @@ APP_DIR=/home/ubuntu/myproject
 REPO_URL=https://github.com/PankajGacche/Jenking_CICD_Pipeline.git
 
 # Navigate to app directory
-cd $APP_DIR
+cd $APP_DIR || { echo "Directory $APP_DIR not found"; exit 1; }
 
 # Pull the latest code
 git pull origin main
@@ -21,5 +21,3 @@ pip install -r requirements.txt
 
 # Restart the Flask application (this depends on your setup)
 sudo systemctl restart my-flask-app.service
-
-# Optionally, you may need to handle other tasks such as migrations
