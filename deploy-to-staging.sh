@@ -85,23 +85,4 @@ fi
 log "Installing dependencies..."
 pip install --upgrade pip
 pip install -r requirements.txt
-
-# Restart the Gunicorn service
-log "Restarting Gunicorn service..."
-if systemctl list-units --type=service | grep -q "$GUNICORN_SERVICE_NAME"; then
-    if systemctl is-active --quiet "$GUNICORN_SERVICE_NAME"; then
-        systemctl restart "$GUNICORN_SERVICE_NAME"
-    else
-        log "Gunicorn service is not active. Starting..."
-        systemctl start "$GUNICORN_SERVICE_NAME"
-    fi
-else
-    log "Gunicorn service file not found. Please ensure the service is properly set up."
-    exit 1
-fi
-
-# Optionally, restart Nginx if used
-# log "Restarting Nginx..."
-# systemctl restart nginx
-
 log "Deployment to staging completed successfully!"
