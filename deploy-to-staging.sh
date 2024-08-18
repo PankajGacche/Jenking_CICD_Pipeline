@@ -13,7 +13,7 @@ SERVICE_NAME="flask_app.service"
 SSH_KEY="/home/pankajgacche/cicd.pem"
 
 # Ensure the SSH key has the correct permissions
-chmod 600 $SSH_KEY
+sudo chmod 600 $SSH_KEY
 
 # Optional: Print start of deployment
 echo "Starting deployment to staging environment..."
