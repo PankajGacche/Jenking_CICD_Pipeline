@@ -59,9 +59,6 @@ log "Installing dependencies..."
 if [ -f requirements.txt ]; then
     pip install --upgrade pip
     pip install -r requirements.txt
-else
-    log "requirements.txt file not found"
-    exit 1
 fi
 
 # Restart the Gunicorn service
