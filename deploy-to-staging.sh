@@ -28,15 +28,22 @@ if ! cd "$APP_DIR"; then
     exit 1
 fi
 
-# Ensure the repository is cloned
+# Ensure the repository is cloned and update
 if [ ! -d ".git" ]; then
     log "Repository not found, cloning..."
     git clone "$REPO_URL" .
 else
-    log "Repository found, pulling the latest changes..."
+    log "Repository found, fetching and updating..."
     git fetch --all
+
+    # Handle uncommitted local changes by stashing them
+    git stash push -m "Jenkins auto-stash before pull"
+
     git checkout "$BRANCH"
     git pull origin "$BRANCH"
+
+    # Apply stashed changes if needed
+    git stash pop || true
 fi
 
 # Activate the virtual environment
