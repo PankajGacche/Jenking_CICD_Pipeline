@@ -45,10 +45,7 @@ else
     # Apply stashed changes if needed
     git stash pop || true
 fi
- 
-# Reload systemd and restart the service
-sudo systemctl daemon-reload
-sudo systemctl restart my-flask-app
+
 # Activate the virtual environment
 log "Activating virtual environment..."
 if [ -f "$VENV_DIR/bin/activate" ]; then
@@ -59,26 +56,19 @@ else
     source "$VENV_DIR/bin/activate"
 fi
 
-echo "Navigating to the application directory..."
-cd /home/ubuntu/myproject || { echo "Directory not found"; exit 1; }
-
-echo "Activating virtual environment..."
-source venv/bin/activate
-
-echo "Installing dependencies..."
+# Install dependencies
+log "Installing dependencies..."
 if [ -f requirements.txt ]; then
+    pip install --upgrade pip
     pip install -r requirements.txt
 else
-    echo "requirements.txt file not found"
+    log "requirements.txt file not found"
     exit 1
 fi
 
-echo "Restarting Gunicorn service..."
-sudo systemctl restart my-flask-app || { echo "Failed to restart Gunicorn"; exit 1; }
+# Restart the Gunicorn service
+log "Restarting Gunicorn service..."
+sudo systemctl daemon-reload
+sudo systemctl restart "$GUNICORN_SERVICE_NAME" || { log "Failed to restart Gunicorn"; exit 1; }
 
-
-# Install Python dependencies
-log "Installing dependencies..."
-pip install --upgrade pip
-pip install -r requirements.txt
 log "Deployment to staging completed successfully!"
