@@ -8,6 +8,26 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                script {
+                    // Check for Python and pip installation
+                    def pythonInstalled = sh(script: 'which python3', returnStatus: true) == 0
+                    def pipInstalled = sh(script: 'which pip3', returnStatus: true) == 0
+
+                    if (!pythonInstalled) {
+                        error 'Python 3 is not installed. Please install it.'
+                    }
+
+                    if (!pipInstalled) {
+                        // Attempt to install pip if not found
+                        sh '''
+                        echo "Installing pip..."
+                        sudo apt update
+                        sudo apt install -y python3-pip
+                        '''
+                    }
+                }
+            }
+            steps {
                 // Checkout source code
                 checkout scm
 
