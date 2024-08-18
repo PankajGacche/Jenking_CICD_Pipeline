@@ -2,7 +2,7 @@ pipeline {
     agent any
    environment {
     ec2Host = 'ec2-16-171-253-111.eu-north-1.compute.amazonaws.com'
-    sshKey = 'my-ec2-key'
+    SSH_KEY = credentials('my-ec2-key')
 }
 
     stages {
@@ -42,16 +42,13 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                 script {
-                    withCredentials([file(credentialsId: my-ec2-key, variable: 'SSH_KEY')]) {
-                        sh '''
+                    sh '''
                         chmod 400 $SSH_KEY
                         ssh -i $SSH_KEY ubuntu@ec2Host "bash -s" < deploy-to-staging.sh
                         '''
-                    }
                 }
             }
         }
-    }
     post {
         success {
             echo 'Pipeline succeeded!'
