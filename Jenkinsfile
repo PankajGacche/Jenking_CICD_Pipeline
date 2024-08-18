@@ -8,6 +8,19 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                // Checkout source code
+                checkout scm
+
+                // Set up and activate virtual environment
+                script {
+                    sh '''
+                        python3 -m venv venv
+                        . venv/bin/activate
+                        pip install -r requirements.txt
+                    '''
+                }
+            }
+             steps {
                 script {
                     // Check for Python and pip installation
                     def pythonInstalled = sh(script: 'which python3', returnStatus: true) == 0
@@ -25,19 +38,6 @@ pipeline {
                         sudo apt install -y python3-pip
                         '''
                     }
-                }
-            }
-            steps {
-                // Checkout source code
-                checkout scm
-
-                // Set up and activate virtual environment
-                script {
-                    sh '''
-                        python3 -m venv venv
-                        . venv/bin/activate
-                        pip install -r requirements.txt
-                    '''
                 }
             }
         }
