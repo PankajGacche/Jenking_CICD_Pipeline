@@ -12,6 +12,15 @@ GUNICORN_SERVICE_NAME="gunicorn_staging"  # Name of the Gunicorn service (adjust
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
 }
+
+# Check for necessary commands
+for cmd in git python3 systemctl pip; do
+    if ! command -v $cmd &> /dev/null; then
+        log "$cmd command not found. Please install it."
+        exit 1
+    fi
+done
+
 # Navigate to the application directory
 log "Navigating to the application directory..."
 if ! cd "$APP_DIR"; then
@@ -47,11 +56,16 @@ pip install -r requirements.txt
 
 # Restart the Gunicorn service
 log "Restarting Gunicorn service..."
-if systemctl is-active --quiet "$GUNICORN_SERVICE_NAME"; then
-    systemctl restart "$GUNICORN_SERVICE_NAME"
+if systemctl list-units --type=service | grep -q "$GUNICORN_SERVICE_NAME"; then
+    if systemctl is-active --quiet "$GUNICORN_SERVICE_NAME"; then
+        systemctl restart "$GUNICORN_SERVICE_NAME"
+    else
+        log "Gunicorn service is not active. Starting..."
+        systemctl start "$GUNICORN_SERVICE_NAME"
+    fi
 else
-    log "Gunicorn service not found or not active, starting..."
-    systemctl start "$GUNICORN_SERVICE_NAME"
+    log "Gunicorn service file not found. Please ensure the service is properly set up."
+    exit 1
 fi
 
 # Optionally, restart Nginx if used
