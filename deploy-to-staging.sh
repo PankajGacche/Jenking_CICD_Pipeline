@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Define variables
-APP_DIR="/home/ubuntu/myproject"
-REPO_URL="https://github.com/PankajGacche/Jenking_CICD_Pipeline.git"
-BRANCH="main"
-VENV_DIR="$APP_DIR/venv"
-APP_NAME="app"
-GUNICORN_SERVICE_NAME="gunicorn_staging"
+APP_DIR="/home/ubuntu/myproject"  # Path to your application directory
+REPO_URL="https://github.com/PankajGacche/Jenking_CICD_Pipeline.git"  # Your Git repository URL
+BRANCH="main"  # Git branch to deploy
+VENV_DIR="$APP_DIR/venv"  # Path to the virtual environment
+APP_NAME="app"  # Name of your Flask application (adjust as needed)
+GUNICORN_SERVICE_NAME="gunicorn_staging"  # Name of the Gunicorn service (adjust as needed)
 
 # Functions
 log() {
@@ -14,35 +14,37 @@ log() {
 }
 
 # Check for necessary commands
-# for cmd in git python3 systemctl pip; do
-#     if ! command -v $cmd &> /dev/null; then
-#         log "$cmd command not found. Please install it."
-#         exit 1
-#     fi
-# done
+for cmd in git python3 systemctl pip; do
+    if ! command -v $cmd &> /dev/null; then
+        log "$cmd command not found. Please install it."
+        exit 1
+    fi
+done
 
 # Ensure the application directory exists
 if [ ! -d "$APP_DIR" ]; then
     log "Application directory not found, creating..."
     mkdir -p "$APP_DIR"
+else
+    # Clear the contents of the directory
+    log "Clearing contents of the directory $APP_DIR..."
+    rm -rf "$APP_DIR"/*
 fi
 
 # Navigate to the application directory
 log "Navigating to the application directory..."
 cd "$APP_DIR" || { log "Application directory not found!"; exit 1; }
 
-# Ensure the repository is cloned and update
-if [ ! -d ".git" ]; then
-    log "Repository not found, cloning..."
-    git clone "$REPO_URL" .
-else
-    log "Repository found, fetching and updating..."
-    git fetch --all
-    git stash push -m "Jenkins auto-stash before pull"
-    git checkout "$BRANCH"
-    git pull origin "$BRANCH"
-    git stash pop || true
-fi
+# Clone the repository
+log "Cloning repository..."
+git clone "$REPO_URL" .
+
+# Change to the repository directory
+cd "$APP_DIR" || { log "Failed to navigate to repository directory"; exit 1; }
+
+# Ensure the repository is on the correct branch
+log "Checking out branch $BRANCH..."
+git checkout "$BRANCH"
 
 # Activate the virtual environment
 log "Activating virtual environment..."
@@ -59,6 +61,9 @@ log "Installing dependencies..."
 if [ -f requirements.txt ]; then
     pip install --upgrade pip
     pip install -r requirements.txt
+else
+    log "requirements.txt file not found"
+    exit 1
 fi
 
 # Restart the Gunicorn service
