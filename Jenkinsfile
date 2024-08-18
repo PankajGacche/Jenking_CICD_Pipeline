@@ -1,7 +1,8 @@
 pipeline {
     agent any
    environment {
-    SSH_KEY_ID = 'ec2-ssh-key'
+    ec2Host = 'ec2-16-171-253-111.eu-north-1.compute.amazonaws.com'
+    sshKey = 'my-ec2-key'
 }
 
     stages {
@@ -38,18 +39,14 @@ pipeline {
                 sh 'sudo ./deploy-to-staging.sh'
             }
         }
-        stage('Deploy') {
-            when {
-            expression {
-               return currentBuild.result == null || currentBuild.result == 'SUCCESS'
-            }
-            }
+        stage('Deploy to EC2') {
             steps {
-                // Deploy application to staging environment
                 script {
-                    withCredentials([sshUserPrivateKey(credentialsId: SSH_KEY_ID, keyFileVariable: 'SSH_KEY')]) {
-                        sh './deploy-to-staging.sh'
-                    }
+                    // Define EC2 connection details
+                    // Deploy script on EC2
+                    sh """
+                        ssh -i ${sshKey} ubuntu@${ec2Host} 'bash -s' < deploy-to-staging.sh
+                    """
                 }
             }
         }
