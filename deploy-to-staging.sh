@@ -12,13 +12,16 @@ VENV_PATH="/home/ubuntu/flask_app/venv"
 SERVICE_NAME="flask_app.service"
 SSH_KEY="/home/pankajgacche/cicd.pem"
 
+# Ensure the SSH key has the correct permissions
+chmod 600 $SSH_KEY
+
 # Optional: Print start of deployment
 echo "Starting deployment to staging environment..."
 
 # Connect to staging server
 echo "Connecting to staging server and deploying the application..."
 
-ssh -i $SSH_KEY $STAGING_SERVER << 'EOF'
+ssh -i $SSH_KEY $STAGING_SERVER << EOF
     # Go to the application directory
     cd $DEPLOY_PATH || exit
 
@@ -28,7 +31,7 @@ ssh -i $SSH_KEY $STAGING_SERVER << 'EOF'
 
     # Activate the virtual environment
     echo "Activating virtual environment..."
-    source venv/bin/activate
+    source $VENV_PATH/bin/activate
 
     # Install/Upgrade dependencies
     echo "Installing/Upgrading dependencies..."
@@ -40,11 +43,12 @@ ssh -i $SSH_KEY $STAGING_SERVER << 'EOF'
 
     # Optional: Check the status of the service
     echo "Checking application service status..."
-    sudo systemctl status $SERVICE_NAME
+    sudo systemctl is-active --quiet $SERVICE_NAME && echo "$SERVICE_NAME is running." || echo "$SERVICE_NAME is not running."
 
     # Optional: Verify application is running (e.g., check if it's listening on port 80)
     echo "Verifying application..."
-    curl -s -o /dev/null -w "%{http_code}" http://localhost:80
+    curl -f -s -o /dev/null http://localhost:80 && echo "Application is up and running." || echo "Application is down."
+
 EOF
 
 # Optional: Notify success
