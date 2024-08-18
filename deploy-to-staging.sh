@@ -1,52 +1,49 @@
 #!/bin/bash
 
-# Fail the script if any command fails
-set -e
-
 # Define variables
-APP_NAME="flask_app"
-STAGING_SERVER="ec2-16-171-253-111.eu-north-1.compute.amazonaws.com"
-REPO_URL="https://github.com/PankajGacche/Jenking_CICD_Pipeline.git"
-DEPLOY_PATH="/home/ubuntu/flask_app"
-VENV_PATH="/home/ubuntu/flask_app/venv"
-SERVICE_NAME="flask_app.service"
-SSH_KEY="/home/pankajgacche/cicd.pem"
+APP_DIR="/home/ubuntu"  # Path to your application on the EC2 instance
+REPO_URL="https://github.com/PankajGacche/Jenking_CICD_Pipeline.git"  # Your Git repository URL
+BRANCH="main"  # Git branch to deploy
+VENV_DIR="$APP_DIR/venv"  # Path to the virtual environment
+APP_NAME="app"  # Name of your Flask application (adjust as needed)
+GUNICORN_SERVICE_NAME="gunicorn_staging"  # Name of the Gunicorn service (adjust as needed)
 
-# Optional: Print start of deployment
-echo "Starting deployment to staging environment..."
+# Functions
+log() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
+}
 
-# Connect to staging server
-echo "Connecting to staging server and deploying the application..."
+# Ensure the script is run as root
+if [ "$(id -u)" -ne "0" ]; then
+    log "This script must be run as root" >&2
+    exit 1
+fi
 
-ssh -i $SSH_KEY $STAGING_SERVER << EOF
-    # Go to the application directory
-    cd $DEPLOY_PATH || exit
+# Navigate to the application directory
+log "Navigating to the application directory..."
+cd $APP_DIR || { log "Application directory not found!"; exit 1; }
 
-    # Pull the latest code from the repository
-    echo "Pulling latest code from repository..."
-    git pull origin staging
+# Pull the latest changes from the repository
+log "Pulling the latest changes from Git..."
+git fetch --all
+git checkout $BRANCH
+git pull origin $BRANCH
 
-    # Activate the virtual environment
-    echo "Activating virtual environment..."
-    source $VENV_PATH/bin/activate
+# Activate the virtual environment
+log "Activating virtual environment..."
+source $VENV_DIR/bin/activate
 
-    # Install/Upgrade dependencies
-    echo "Installing/Upgrading dependencies..."
-    pip install -r requirements.txt
+# Install Python dependencies
+log "Installing dependencies..."
+pip install --upgrade pip
+pip install -r requirements.txt
 
-    # Restart the application service
-    echo "Restarting application service..."
-    sudo systemctl restart $SERVICE_NAME
+# Restart the Gunicorn service
+log "Restarting Gunicorn service..."
+systemctl restart $GUNICORN_SERVICE_NAME
 
-    # Optional: Check the status of the service
-    echo "Checking application service status..."
-    sudo systemctl is-active --quiet $SERVICE_NAME && echo "$SERVICE_NAME is running." || echo "$SERVICE_NAME is not running."
+# Optionally, restart Nginx if used
+# log "Restarting Nginx..."
+# systemctl restart nginx
 
-    # Optional: Verify application is running (e.g., check if it's listening on port 80)
-    echo "Verifying application..."
-    curl -f -s -o /dev/null http://localhost:80 && echo "Application is up and running." || echo "Application is down."
-
-EOF
-
-# Optional: Notify success
-echo "Deployment to staging completed successfully."
+log "Deployment to staging completed successfully!"
