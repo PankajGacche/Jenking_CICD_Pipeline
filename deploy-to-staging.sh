@@ -24,12 +24,25 @@ done
 log "Navigating to the application directory..."
 cd "$APP_DIR" || { log "Application directory not found!"; exit 1; }
 
+# Check if the directory exists
+if [ -d "$APP_DIR" ]; then
+    echo "Deleting all files from $APP_DIR..."
+    cd "$APP_DIR" || { echo "Failed to navigate to $APP_DIR"; exit 1; }
+
+    # Delete all files and directories including hidden ones
+    rm -rf ./* ./.*
+    
+    echo "All files and directories in $APP_DIR have been deleted."
+else
+    echo "Directory $APP_DIR does not exist."
+    exit 1
+fi
+
 # Clear the contents of the directory if necessary
 if [ -d ".git" ]; then
     log "Directory already contains a git repository, pulling latest changes..."
     git pull origin "$BRANCH"
 else
-    git pull origin "$BRANCH"
     log "Cloning repository..."
     git clone "$REPO_URL" .
     cd "$APP_DIR" || { log "Failed to navigate to repository directory"; exit 1; }
