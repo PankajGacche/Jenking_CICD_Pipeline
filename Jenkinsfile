@@ -27,7 +27,8 @@ pipeline {
                 // Activate virtual environment and run tests
                 script {
                     sh '''
-                         pytest
+                    . venv/bin/activate
+                     pytest
                     '''
                 }
             }
