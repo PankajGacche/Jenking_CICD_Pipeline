@@ -20,16 +20,19 @@ for cmd in git python3 systemctl pip; do
         exit 1
     fi
 done
-echo "Clearing contents of the directory /home/ubuntu/myproject..."
+
+log "Clearing contents of the directory $APP_DIR..."
 rm -rf "$APP_DIR"/*
+
 # Ensure the application directory exists
 if [ ! -d "$APP_DIR" ]; then
     log "Application directory not found, creating..."
     mkdir -p "$APP_DIR"
-    
+fi
+
 # Navigate to the application directory
 log "Navigating to the application directory..."
-cd "$APP_DIR" || { log "Application directory not found!"; exit 1; }
+cd "$APP_DIR" || { log "Failed to navigate to the application directory"; exit 1; }
 
 # Clone the repository
 log "Cloning repository..."
