@@ -37,12 +37,6 @@ pipeline {
             }
         }
         stage('Deploy to EC2') {
-            when {
-                expression {
-                    // Ensure the 'Test' stage was successful
-                    currentBuild.currentResult == 'SUCCESS'
-                }
-            }
             steps {
                 script {
                     sh '''
