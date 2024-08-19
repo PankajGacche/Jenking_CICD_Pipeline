@@ -21,29 +21,24 @@ for cmd in git python3 systemctl pip; do
     fi
 done
 
-log "Clearing contents of the directory $APP_DIR..."
-rm -rf "$APP_DIR"/*
-
 # Ensure the application directory exists
-if [ ! -d "$APP_DIR" ]; then
-    log "Application directory not found, creating..."
-    mkdir -p "$APP_DIR"
-fi
+log "Ensuring the application directory exists..."
+mkdir -p "$APP_DIR"
 
 # Navigate to the application directory
 log "Navigating to the application directory..."
-cd "$APP_DIR" || { log "Failed to navigate to the application directory"; exit 1; }
+cd "$APP_DIR" || { log "Application directory not found!"; exit 1; }
 
-# Clone the repository
-log "Cloning repository..."
-git clone "$REPO_URL" .
-
-# Change to the repository directory
-cd "$APP_DIR" || { log "Failed to navigate to repository directory"; exit 1; }
-
-# Ensure the repository is on the correct branch
-log "Checking out branch $BRANCH..."
-git checkout "$BRANCH"
+# Clear the contents of the directory if necessary
+if [ -d ".git" ]; then
+    log "Directory already contains a git repository, pulling latest changes..."
+    git pull origin "$BRANCH"
+else
+    log "Cloning repository..."
+    git clone "$REPO_URL" .
+    cd "$APP_DIR" || { log "Failed to navigate to repository directory"; exit 1; }
+    git checkout "$BRANCH"
+fi
 
 # Activate the virtual environment
 log "Activating virtual environment..."
