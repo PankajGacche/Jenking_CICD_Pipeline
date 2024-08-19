@@ -9,6 +9,7 @@ APP_NAME="app"  # Name of your Flask application (adjust as needed)
 GUNICORN_SERVICE_NAME="gunicorn_staging"  # Name of the Gunicorn service (adjust as needed)
 
 # Functions
+
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
 }
