@@ -9,7 +9,6 @@ pipeline {
             steps {
                 // Checkout source code
                 checkout scm
-
                 // Set up and activate virtual environment
                 script {
                     sh '''
