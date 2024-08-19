@@ -20,11 +20,6 @@ for cmd in git python3 systemctl pip; do
         exit 1
     fi
 done
-
-# Ensure the application directory exists
-log "Ensuring the application directory exists..."
-mkdir -p "$APP_DIR"
-
 # Navigate to the application directory
 log "Navigating to the application directory..."
 cd "$APP_DIR" || { log "Application directory not found!"; exit 1; }
@@ -34,6 +29,7 @@ if [ -d ".git" ]; then
     log "Directory already contains a git repository, pulling latest changes..."
     git pull origin "$BRANCH"
 else
+    git pull origin "$BRANCH"
     log "Cloning repository..."
     git clone "$REPO_URL" .
     cd "$APP_DIR" || { log "Failed to navigate to repository directory"; exit 1; }
