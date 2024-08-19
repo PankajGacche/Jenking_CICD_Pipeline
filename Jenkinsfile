@@ -5,7 +5,6 @@ pipeline {
     SSH_KEY = credentials('my-ec2-key')
 }
 
-    
     stages {
         stage('Build') {
             steps {
