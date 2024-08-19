@@ -19,15 +19,13 @@ pipeline {
                     '''
                 }
             }
-             
         }
         stage('Test') {
             steps {
                 // Activate virtual environment and run tests
                 script {
                     sh '''
-                        . venv/bin/activate
-                        pytest
+                         pytest
                     '''
                 }
             }
