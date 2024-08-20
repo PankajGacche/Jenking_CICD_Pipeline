@@ -63,6 +63,7 @@ pipeline {
                 to: 'pankajgacche.sdet@gmail.com'
             )
         }
+        
         failure {
             echo 'Pipeline failed.'
             emailext (
