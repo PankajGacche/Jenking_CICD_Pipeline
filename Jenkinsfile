@@ -71,7 +71,8 @@ pipeline {
             ''',
             to: 'pankajgacche.sdet@gmail.com',
             attachLog: true,
-            compressLog: true
+            compressLog: true,
+            mimeType: 'text/html'
         )
     }
     
@@ -91,7 +92,8 @@ pipeline {
             ''',
             to: 'pankajgacche.sdet@gmail.com',
             attachLog: true,
-            compressLog: true
+            compressLog: true,
+            mimeType: 'text/html'
         )
     }
     always {
