@@ -58,22 +58,40 @@ pipeline {
     success {
         echo 'Pipeline succeeded!'
         emailext (
-            attachLog: true,
-            body: "Build succeeded. Job: ${env.JOB_NAME}, Build Number: ${env.BUILD_NUMBER}",
-            compressLog: true,
             subject: "Jenkins Build Succeeded: ${env.JOB_NAME} - ${env.BUILD_NUMBER}",
-            to: 'pankajgacche.sdet@gmail.com'
+            body: '''
+                <html>
+                <body>
+                    <p><b>The build failed.</b></p>
+                    <p><b>Job:</b> ${env.JOB_NAME}</p>
+                    <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+                    <p><b>Build URL:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                </body>
+                </html>
+            ''',
+            to: 'pankajgacche.sdet@gmail.com',
+            attachLog: true,
+            compressLog: true
         )
     }
     
     failure {
         echo 'Pipeline failed.'
         emailext (
-            attachLog: true,
-            body: "Build failed. Job: ${env.JOB_NAME}, Build Number: ${env.BUILD_NUMBER}",
-            compressLog: true,
             subject: "Jenkins Build Failed: ${env.JOB_NAME} - ${env.BUILD_NUMBER}",
-            to: 'pankajgacche.sdet@gmail.com'
+            body: '''
+                <html>
+                <body>
+                    <p><b>The build failed.</b></p>
+                    <p><b>Job:</b> ${env.JOB_NAME}</p>
+                    <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+                    <p><b>Build URL:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                </body>
+                </html>
+            ''',
+            to: 'pankajgacche.sdet@gmail.com',
+            attachLog: true,
+            compressLog: true
         )
     }
     always {
