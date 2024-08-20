@@ -1,9 +1,9 @@
 pipeline {
     agent any
-   environment {
-    ec2Host = 'ec2-16-171-253-111.eu-north-1.compute.amazonaws.com'
-    SSH_KEY = credentials('my-ec2-key')
-}
+    environment {
+        ec2Host = 'ec2-16-171-253-111.eu-north-1.compute.amazonaws.com'
+        SSH_KEY = credentials('my-ec2-key')
+    }
 
     stages {
         stage('Build') {
@@ -16,7 +16,7 @@ pipeline {
                         python3 -m venv venv
                         . venv/bin/activate
                         pip install --upgrade pip
-                        pip install -r requirements.txt  # Install pytest and any other dependencies
+                        pip install -r requirements.txt
                     '''
                 }
             }
@@ -26,8 +26,8 @@ pipeline {
                 // Activate virtual environment and run tests
                 script {
                     sh '''
-                    . venv/bin/activate
-                     pytest
+                        . venv/bin/activate
+                        pytest
                     '''
                 }
             }
@@ -50,7 +50,7 @@ pipeline {
                     sh '''
                         sudo chmod 400 $SSH_KEY
                         ssh -i $SSH_KEY ubuntu@$ec2Host "bash -s" < deploy-to-staging.sh
-                        '''
+                    '''
                 }
             }
         }
