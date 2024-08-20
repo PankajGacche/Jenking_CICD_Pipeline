@@ -58,9 +58,19 @@ pipeline {
     post {
         success {
             echo 'Pipeline succeeded!'
+            emailext (
+                subject: "Build Successful: ${env.JOB_NAME} - ${env.BUILD_NUMBER}",
+                body: "The build was successful.\n\nJob: ${env.JOB_NAME}\nBuild Number: ${env.BUILD_NUMBER}\nBuild URL: ${env.BUILD_URL}",
+                to: 'pankajgacche.sdet@gmail.com'
+            )
         }
         failure {
             echo 'Pipeline failed.'
+            emailext (
+                subject: "Build Failed: ${env.JOB_NAME} - ${env.BUILD_NUMBER}",
+                body: "The build failed.\n\nJob: ${env.JOB_NAME}\nBuild Number: ${env.BUILD_NUMBER}\nBuild URL: ${env.BUILD_URL}",
+                to: 'pankajgacche.sdet@gmail.com'
+            )
         }
         always {
             echo 'Pipeline finished.'
