@@ -75,7 +75,6 @@ pipeline {
                 mimeType: 'text/html'
             )
         }
-        
         failure {
             echo 'Pipeline failed.'
             emailext (
@@ -96,7 +95,6 @@ pipeline {
                 mimeType: 'text/html'
             )
         }
-        
         always {
             echo 'Pipeline finished.'
         }
