@@ -4,7 +4,6 @@ pipeline {
         ec2Host = 'ec2-16-171-253-111.eu-north-1.compute.amazonaws.com'
         SSH_KEY = credentials('my-ec2-key')
     }
-
     stages {
         stage('Build') {
             steps {
