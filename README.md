@@ -8,7 +8,7 @@
 ![alt text](Readme_File_Images/image-33.png)
 
 ## Installed Jenkins on source machine:
-```bash
+```
 sudo apt update
 sudo apt upgrade -y
 sudo apt install openjdk-11-jdk -y
